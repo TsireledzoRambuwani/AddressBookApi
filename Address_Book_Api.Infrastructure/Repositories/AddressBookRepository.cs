@@ -32,28 +32,6 @@ namespace Address_Book_Api.Infrastructure.Repositories
          }
 
 
-        public async Task<AddressBookDto> GetByIdAsync(string id)
-        {
-            var addressBooks = await _context.AddressBooks
-                            .Where(x =>x.Id.Equals(new Guid(id)))
-                            .FirstOrDefaultAsync();
-
-            if (addressBooks is not null) return new AddressBookDto();
-
-            return new AddressBookDto
-            {
-                Id = addressBooks.Id.ToString(),
-                Firstname = addressBooks.Firstname,
-                About = addressBooks.About,
-                Contacts = addressBooks.Contacts,
-                Surname =addressBooks.Surname,
-                ImageUrl= addressBooks.ImageUrl,
-                Website= addressBooks.Website,
-                Email = addressBooks.Email,
-
-
-            };
-        }
 
         public async Task<RepositoryResponse> RequestCVAsync(string id)
         {
@@ -73,6 +51,30 @@ namespace Address_Book_Api.Infrastructure.Repositories
                 return new RepositoryResponse { Error = "Cound not Send email, Please contact Administrator.", Succeded = false };
 
 
+        }
+
+
+        private async Task<AddressBookDto> GetByIdAsync(string id)
+        {
+            var addressBooks = await _context.AddressBooks
+                            .Where(x => x.Id.Equals(new Guid(id)))
+                            .FirstOrDefaultAsync();
+
+            if (addressBooks is not null) return new AddressBookDto();
+
+            return new AddressBookDto
+            {
+                Id = addressBooks.Id.ToString(),
+                Firstname = addressBooks.Firstname,
+                About = addressBooks.About,
+                Contacts = addressBooks.Contacts,
+                Surname = addressBooks.Surname,
+                ImageUrl = addressBooks.ImageUrl,
+                Website = addressBooks.Website,
+                Email = addressBooks.Email,
+
+
+            };
         }
 
         private string GetEmailBody(AddressBookDto profile)

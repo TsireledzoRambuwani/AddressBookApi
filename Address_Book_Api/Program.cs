@@ -2,7 +2,6 @@ using Address_Book_Api.Infrastructure;
 using Address_Book_Api.Infrastructure.Data;
 using Address_Book_Api.Middleware;
 using Microsoft.OpenApi.Models;
-using Org.BouncyCastle.Security;
 using Serilog;
 
 
