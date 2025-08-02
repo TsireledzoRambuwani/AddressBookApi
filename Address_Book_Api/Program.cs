@@ -4,15 +4,34 @@ using Address_Book_Api.Infrastructure.Data;
 using Address_Book_Api.Middleware;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using System.Reflection;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+});
+
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Address Book Api", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo 
+    { 
+        Title = "Address Book Api",
+        Version = "v1" ,
+        Description="This Api allows you to get list of address books",
+        Contact = new OpenApiContact
+        {
+            Name="Tsireledzo",
+            Email="rambuwanitsireledzo@gmail.com"
+        }
+    });
+
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
 builder.Services.AddInfrastructure();

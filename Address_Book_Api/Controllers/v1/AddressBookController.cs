@@ -12,6 +12,11 @@ namespace Address_Book_Api.Controllers.v1
         private readonly IAddressBookRepository _addressBookRepository = addressBookRepository;
         private readonly ILogger<AddressBookController> _logger = logger;
 
+
+        /// <summary>
+        ///  Gets List of Address Books
+        /// </summary>
+        /// <returns> List of Address Books</returns>
         [HttpGet("GetAll")]
         public async Task<IActionResult> Index()
         {
@@ -32,8 +37,15 @@ namespace Address_Book_Api.Controllers.v1
             }
         }
 
+
+
+        /// <summary>
+        ///  Sends Email to profile email to request CV
+        /// </summary>
+        /// <param name="id">Address Book Id</param>
        
-        [HttpGet("RequestCV")]
+
+        [HttpGet("RequestCV{id}")]
         public async Task<IActionResult> RequestCV(string id)
         {
             try
