@@ -1,14 +1,15 @@
 ﻿using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
-using Microsoft.Extensions.Configuration;
 using Address_Book_Api.Application.Services;
+using Microsoft.Extensions.Options;
+using Address_Book_Api.Application.Models;
 
 namespace Address_Book_Api.Infrastructure.Services
 {
-    public class EmailService(IConfiguration configuration) : IEmailService
+    public class EmailService(IOptions<EmailSettings> emailSettings) : IEmailService
     {
-        private readonly IConfiguration _configuration = configuration;
+        private readonly EmailSettings _emailSettings = emailSettings.Value;
 
         public async Task<bool> SendEmailAsync(string toEmail, string subject, string message)
         {
@@ -17,21 +18,19 @@ namespace Address_Book_Api.Infrastructure.Services
 
            
             var email = new MimeMessage();
-            email.From.Add(MailboxAddress.Parse(_configuration["EmailSettings:SenderEmail"]));
+            email.From.Add(MailboxAddress.Parse(_emailSettings.SenderEmail));
             email.To.Add(MailboxAddress.Parse(toEmail));
             email.Subject = subject;
             email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = message };
 
-            using (var smtp = new SmtpClient())
-            {
-                await smtp.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
-                await smtp.AuthenticateAsync(_configuration["EmailSettings:SenderEmail"],
-                                            _configuration["EmailSettings:AppPassword"]);
+                using var smtp = new SmtpClient();
+                await smtp.ConnectAsync(_emailSettings.SmtpServer, _emailSettings.SmtpPort, SecureSocketOptions.StartTls);
+                await smtp.AuthenticateAsync(_emailSettings.SenderEmail,
+                                            _emailSettings.SenderPassword);
                 await smtp.SendAsync(email);
                 await smtp.DisconnectAsync(true);
-            }
 
-            return true;
+                return true;
             }
             catch (Exception ex)
             {

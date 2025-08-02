@@ -2,7 +2,7 @@
 {
     public class RepositoryResponse
     {
-        public bool Succeded { get; set; }
+        public bool Succeeded { get; set; }
         public string Error { get; set; }
     }
 }

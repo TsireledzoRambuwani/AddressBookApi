@@ -6,7 +6,7 @@ namespace Address_Book_Api.Domain.Entities
     public class AddressBook
     {
         [Key]
-        public Guid Id { get; set; }  =Guid.NewGuid();
+        public Guid Id { get; set; } 
         [Required]
         [StringLength(50)]
         public string Firstname { get; set; }

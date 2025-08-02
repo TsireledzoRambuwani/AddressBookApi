@@ -37,30 +37,34 @@ namespace Address_Book_Api.Infrastructure.Repositories
         {
             var profile = await GetByIdAsync(id);
 
-            if(profile is null)
-                return new RepositoryResponse { Error="Cound not find Address Book.", Succeded=false };
+            if (profile is null)
+                return new RepositoryResponse { Error = "Cound not find Address Book.", Succeeded = false };
+
+            bool isMailSent = await RequectCVEmail(profile);
+
+            if (!isMailSent)
+                return new RepositoryResponse { Error = "Cound not Send email, Please contact Administrator.", Succeeded = false };
 
 
-            string emailBody = GetEmailBody(profile);
-
-            var isMailSent = await _emailService.SendEmailAsync(profile.Email, "Request CV", emailBody);
-
-            if (isMailSent) 
-                return new RepositoryResponse { Succeded = true };
-            else 
-                return new RepositoryResponse { Error = "Cound not Send email, Please contact Administrator.", Succeded = false };
-
+            return new RepositoryResponse { Succeeded = true };
 
         }
 
+        private async Task<bool> RequectCVEmail(AddressBookDto profile)
+        {
+            string emailBody = GetEmailBody(profile);
+
+            var isMailSent = await _emailService.SendEmailAsync(profile.Email, "Request CV", emailBody);
+            return isMailSent;
+        }
 
         private async Task<AddressBookDto> GetByIdAsync(string id)
         {
             var addressBooks = await _context.AddressBooks
-                            .Where(x => x.Id.Equals(new Guid(id)))
+                            .Where(x => x.Id.Equals(new Guid(id.ToLower())))
                             .FirstOrDefaultAsync();
 
-            if (addressBooks is not null) return new AddressBookDto();
+            if (addressBooks is  null) return new AddressBookDto();
 
             return new AddressBookDto
             {
@@ -77,9 +81,9 @@ namespace Address_Book_Api.Infrastructure.Repositories
             };
         }
 
-        private string GetEmailBody(AddressBookDto profile)
+        private static string GetEmailBody(AddressBookDto profile)
         {
-            string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "EmailTemplate", "CVRequestEmail.html");
+            string templatePath = Path.Combine(Directory.GetCurrentDirectory() + ".Infrastructure", "EmailTemplate", "CVRequestEmail.html");
             string emailBody = File.ReadAllText(templatePath);
 
             emailBody.Replace("Firstname", profile.Firstname)

@@ -1,9 +1,9 @@
+using Address_Book_Api.Application.Models;
 using Address_Book_Api.Infrastructure;
 using Address_Book_Api.Infrastructure.Data;
 using Address_Book_Api.Middleware;
 using Microsoft.OpenApi.Models;
 using Serilog;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,10 +13,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Address Book Api", Version = "v1" });
-
 });
 
-builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddInfrastructure();
+
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
 Log.Logger = new LoggerConfiguration()
             .ReadFrom.Configuration(builder.Configuration)

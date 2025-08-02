@@ -13,14 +13,14 @@ namespace Address_Book_Api.Infrastructure
     public static class DependencyInjection
     {
         public static IServiceCollection AddInfrastructure
-                (this IServiceCollection services, IConfiguration configuration)
+                (this IServiceCollection services)
         {
            
             services.AddDbContext<AddressBookContext> (options =>
             options.UseInMemoryDatabase("AddressBookDb"));
 
             services.AddScoped<IAddressBookRepository, AddressBookRepository>();
-            services.AddScoped<IEmailService, EmailService>();
+            services.AddTransient<IEmailService, EmailService>();
 
 
           
