@@ -11,7 +11,6 @@ This leverages .NET 8.0, You can learn .NET 8 more on [ASP.NET Core 8.0](https:/
 
 
 - `appsettings.Development.json` is .NET Core Web API development environment config
-- `Startup.cs` is .NET Core Web API startup & path routing config 
 - `Program.cs` is .NET Core Web API environment variable mapping config 
 
 ## Setting Up
