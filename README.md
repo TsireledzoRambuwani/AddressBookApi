@@ -1,5 +1,5 @@
 ﻿# AddressBookApi
-Address Book Api responsible for fetching address books for diffrent profiles
+Address Book Api responsible for fetching address books for different profiles
 
 This is an App to display all Address books.
 This leverages .NET 8.0, You can learn .NET 8 more on [ASP.NET Core 8.0](https://learn.microsoft.com/en-us/aspnet/core/release-notes/aspnetcore-8.0?view=aspnetcore-9.0).
