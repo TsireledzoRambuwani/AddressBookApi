@@ -7,7 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Address_Book_Api.Infrastructure.Repositories
 {
-    public class AddressBookRepository(AddressBookContext context, IEmailService emailService) : IAddressBookRepository
+    public class AddressBookRepository(AddressBookContext context,
+        IEmailService emailService) : IAddressBookRepository
     {
         private readonly AddressBookContext _context = context;
         private readonly IEmailService _emailService = emailService;
@@ -86,9 +87,9 @@ namespace Address_Book_Api.Infrastructure.Repositories
             string templatePath = Path.Combine(Directory.GetCurrentDirectory() + ".Infrastructure", "EmailTemplate", "CVRequestEmail.html");
             string emailBody = File.ReadAllText(templatePath);
 
-            emailBody.Replace("Firstname", profile.Firstname)
-                     .Replace("Surname", profile.Surname)
-                     .Replace("Website", profile.Website);
+            emailBody.Replace("{{Firstname}}", profile.Firstname)
+                     .Replace("{{Surname}}", profile.Surname)
+                     .Replace("{{Website}}", profile.Website);
 
         return emailBody;
         }

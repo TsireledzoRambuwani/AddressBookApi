@@ -45,7 +45,7 @@ namespace Address_Book_Api.Controllers.v1
         /// <param name="id">Address Book Id</param>
        
 
-        [HttpGet("RequestCV{id}")]
+        [HttpGet("RequestCV")]
         public async Task<IActionResult> RequestCV(string id)
         {
             try
